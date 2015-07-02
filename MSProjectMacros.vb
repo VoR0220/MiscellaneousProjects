@@ -80,12 +80,9 @@ Sub Send_Outlook_Email(t As Task)
 
     Dim objOLApp As Outlook.Application
     Dim olMail As Outlook.MailItem
-    Dim NewTask As Outlook.TaskItem
-    Dim currTime As Date
-    Dim progress As String
-    Const stSubjectStart As String = " Edge Legacy Implementation Project - <"
+    
+    Const stSubjectStart As String = "Edge Legacy Implementation Project - <"
     Const stSubjectEnd As String = ">"
-    currTime = DateValue(Now)
     
     ' Set the Application object
     Set objOLApp = CreateObject("Outlook.Application")
@@ -95,17 +92,34 @@ Sub Send_Outlook_Email(t As Task)
     
     olMail.To = t.Text24 'email Responsible in To Category
     olMail.CC = t.Text23 + t.Text26 + t.Text21 'Accountable, Consulted, Informed in that order
-    'If t.Finish < currTime Then
-    '    progress = "Escalated"
-    'Else
-    '    progress = "In Progress"
-    'End If
-    
     olMail.Subject = stSubjectStart + CStr(t.UniqueID) + "-" + t.Name + stSubjectEnd
+    
+    Select Case t.Text25
+        Case "1-FSD"        'Sample body of email (if you need further help here, just ask me)
+                            ' "&" is used for appending to a string
+                            ' "_" is used for extending a string when writing it in code (notice how it's always at the end of the statement)
+                            ' "vbCr" is essentially an endline statement that will push your text to the next line
+                            ' "vbTab"...this one is pretty self explanatory
+            olMail.Body = _
+            "Dear " & stSubjectStart & ", " & vbCr & vbCr & vbTab & _
+            "I'll see you in 2 minutes for our meeting!" & vbCr & vbCr & _
+            "Btw: I've added you to my contact list."
+        Case "2-TSD"
+        
+        Case "3-DEV"
+        
+        Case "4-TUT"
+        
+        Case "5-FUT"
+    End Select
+    
+    'olMail.Send    'optional call to automate sending of messages...may want to leave this commented out in case of additional notes
+    
     olMail.Display
     
+    Set objOLApp = Nothing  'release memory
+    Set olMail = Nothing
     
-
 End Sub
 
 '******************************************************************************'
