@@ -24,6 +24,10 @@ Sub CheckPreds()
         If (t Is Nothing) Or (t.Summary) Then
         ' do nothing on blank lines
         Else
+            If t.Text11 = "In Progress" Or t.Text11 = "Late / Overdue" Then 
+                Continue For
+            End If
+            
             If t.PercentComplete = 100 Then
                 'SetTaskField Field:="Text23", Value:="Completed", TaskID:=t.ID
                 SetTaskField Field:="Text11", Value:="Completed", TaskID:=t.ID
