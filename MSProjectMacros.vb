@@ -25,7 +25,7 @@ Sub CheckPreds()
         ' do nothing on blank lines
         Else
             If t.Text11 = "In Progress" Or t.Text11 = "Late / Overdue" Then 
-                Continue For
+                Goto NextIteration
             End If
             
             If t.PercentComplete = 100 Then
@@ -69,6 +69,7 @@ Sub CheckPreds()
                         End If
                 End If
             End If
+            NextIteration: 
         Next t
     
     'Release Objects from Memory
