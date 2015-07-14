@@ -154,9 +154,9 @@ Sub Send_Outlook_Email(t As Task)
     
 
 End Sub
-Sub CheckLateInProgress()
-    
-    '-----------------------------------------------------------------------'
+
+Sub CheckInProg()
+ '-----------------------------------------------------------------------'
     '--                 Variable Definition                             ----'
     '-----------------------------------------------------------------------'
     
@@ -178,11 +178,43 @@ Sub CheckLateInProgress()
     
     For Each t In ts
         'check = Format(t.Finish, "General Date")
+            
+            If t.Text11 = "In Progress" Then
+                Call Send_Outlook_Email(t)
+            End If
+    Next t
+    
+    'Release Objects from Memory
+
+    
+    Set t = Nothing
+    Set ts = Nothing
+End Sub
+
+Sub CheckLate()
+    
+    '-----------------------------------------------------------------------'
+    '--                 Variable Definition                             ----'
+    '-----------------------------------------------------------------------'
+    
+    Dim ts As Tasks   'Active task selection
+    Dim t As Task
+    'Dim tProgs As Task
+    Dim time As Date
+    Dim check As Date
+
+    time = now()
+    Set ts = ActiveProject.Tasks
+    
+    '-----------------------------------------------------------------------'
+    '--                 Main Loop                                       ----'
+    '-----------------------------------------------------------------------'
+    
+    
+    For Each t In ts
+        'check = Format(t.Finish, "General Date")
             If t.Text11 = "In Progress" And time > t.Finish Then
                 SetTaskField Field:="Text11", Value:="Late / Overdue", TaskID:=t.ID
-            End If
-            
-            If t.Text11 = "Late / Overdue" Or t.Text11 = "In Progress" Then
                 Call Send_Outlook_Email(t)
             End If
     Next t
@@ -289,8 +321,10 @@ Private Sub AddHighlightRibbon()
     ribbonXml = ribbonXml + "imageMso=""QueryAppend"" onAction=""RefreshTaskStatus""/>"
     ribbonXml = ribbonXml + "          <mso:button id=""generateEmail"" label=""Check Predecessors and Generate Email"" "
     ribbonXml = ribbonXml + "imageMso=""Consolidate"" onAction=""CheckPreds""/>"
-    ribbonXml = ribbonXml + "          <mso:button id=""checkLateInProgressTask"" label=""Check Late/In Progress Tasks and Generate Email"" "
-    ribbonXml = ribbonXml + "imageMso=""DiagramTargetInsertClassic"" onAction=""CheckLateInProgress""/>"
+    ribbonXml = ribbonXml + "          <mso:button id=""checkLateTask"" label=""Check Late Tasks and Generate Email"" "
+    ribbonXml = ribbonXml + "imageMso=""DiagramTargetInsertClassic"" onAction=""CheckLate""/>"
+    ribbonXml = ribbonXml + "          <mso:button id=""checkInProgTask"" label=""Check In Progress Tasks and Generate Email"" "
+    ribbonXml = ribbonXml + "imageMso=""DiagramTargetInsertClassic"" onAction=""CheckInProg""/>"
     ribbonXml = ribbonXml + "        </mso:group>"
     ribbonXml = ribbonXml + "      </mso:tab>"
     ribbonXml = ribbonXml + "    </mso:tabs>"
