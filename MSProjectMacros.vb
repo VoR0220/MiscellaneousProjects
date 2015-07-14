@@ -24,8 +24,8 @@ Sub CheckPreds()
         If (t Is Nothing) Or (t.Summary) Then
         ' do nothing on blank lines
         Else
-            If t.Text11 = "In Progress" Or t.Text11 = "Late / Overdue" Then 
-                Goto NextIteration
+            If t.Text11 = "In Progress" Or t.Text11 = "Late / Overdue" Then
+                GoTo NextIteration
             End If
             
             If t.PercentComplete = 100 Then
@@ -69,7 +69,7 @@ Sub CheckPreds()
                         End If
                 End If
             End If
-            NextIteration: 
+NextIteration:
         Next t
     
     'Release Objects from Memory
@@ -280,7 +280,7 @@ Sub RefreshTaskStatus()
                         ready = False
                      End If
                 End If
-                If (ready) Then
+                If (ready And t.Text12 = "") Then
                     'Font32Ex CellColor:=&HF0D9C6
                     SetTaskField Field:="Text11", Value:="Ready", TaskID:=t.ID
                     If (t.Text12 = "Yes") Then
